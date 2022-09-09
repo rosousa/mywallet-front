@@ -13,51 +13,60 @@ function Wallet() {
 
   return (
     <Wrapper>
-      <Header>
-        <Title>Olá, fulano</Title>
-        <span onClick={() => navigate("/")}>
-          <IoExitOutline color="#ffffff" />
-        </span>
-      </Header>
-      <Content>
-        {/* <Transaction>
+      <div>
+        <Header>
+          <Title>Olá, fulano</Title>
+          <span onClick={() => navigate("/")}>
+            <IoExitOutline color="#ffffff" />
+          </span>
+        </Header>
+        <Content>
+          {/* <Transaction>
           <div>
             <Date>30/11</Date>
             <Description>Almoço mãe</Description>
           </div>
           <Value>39,90</Value>
         </Transaction> */}
-        <NoRegistry>
-          <p>Não há registros de entrada ou saída</p>
-        </NoRegistry>
-      </Content>
-      <TransactionButtons>
-        <TransactionOption>
-          <span>
-            <IoAddCircleOutline color={"#ffffff"} />
-          </span>
-          <p>Nova entrada</p>
-        </TransactionOption>
-        <TransactionOption>
-          <span>
-            <IoRemoveCircleOutline color={"#ffffff"} />
-          </span>
-          <p>Nova saída</p>
-        </TransactionOption>
-      </TransactionButtons>
+          <NoRegistry>
+            <p>Não há registros de entrada ou saída</p>
+          </NoRegistry>
+        </Content>
+        <TransactionButtons>
+          <TransactionOption onClick={() => navigate("/wallet/deposit")}>
+            <span>
+              <IoAddCircleOutline color={"#ffffff"} />
+            </span>
+            <p>Nova entrada</p>
+          </TransactionOption>
+          <TransactionOption onClick={() => navigate("/wallet/withdraw")}>
+            <span>
+              <IoRemoveCircleOutline color={"#ffffff"} />
+            </span>
+            <p>Nova saída</p>
+          </TransactionOption>
+        </TransactionButtons>
+      </div>
     </Wrapper>
   );
 }
 
 const Wrapper = styled.div`
   background-color: #8c11be;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   font-family: "Raleway", sans-serif;
   width: 100vw;
   height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+
+  & > div {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    max-height: 650px;
+  }
 `;
 
 const Header = styled.div`

@@ -3,6 +3,8 @@ import GlobalStyle from "../styles/GlobalStyle";
 import Login from "./login/Login";
 import Register from "./login/Register";
 import Wallet from "./wallet/Wallet";
+import Deposit from "./wallet/deposit/Deposit";
+import Withdraw from "./wallet/withdraw/Withdraw";
 
 function App() {
   return (
@@ -13,6 +15,8 @@ function App() {
           <Route path="/" element={<Login />} />
           <Route path="/sign-up" element={<Register />} />
           <Route path="/wallet" element={<Wallet />} />
+          <Route path="/wallet/deposit" element={<Deposit />} />
+          <Route path="/wallet/withdraw" element={<Withdraw />} />
         </Routes>
       </BrowserRouter>
     </>
