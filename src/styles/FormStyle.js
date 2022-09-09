@@ -13,14 +13,16 @@ const Input = styled.input`
   height: 58px;
   padding: 0 10px;
   font-size: 20px;
-
-  &::placeholder {
-  }
+  border: none;
+  border-radius: 5px;
 `;
 
 const Button = styled.button`
   background-color: #a328d6;
   color: #ffffff;
+  font-family: "Raleway", sans-serif;
+  font-weight: 700;
+  font-size: 20px;
   width: 100%;
   height: 46px;
   border-radius: 5px;

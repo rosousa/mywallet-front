@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-function Title() {
+function Logo() {
   return <MyWalletTitle>My Wallet</MyWalletTitle>;
 }
 
@@ -10,4 +10,4 @@ const MyWalletTitle = styled.p`
   font-size: 32px;
 `;
 
-export default Title;
+export default Logo;

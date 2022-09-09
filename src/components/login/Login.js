@@ -1,10 +1,13 @@
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import Title from "./Title";
+import Logo from "./Logo";
 import { Form, Input, Button } from "../../styles/FormStyle";
 import { useState } from "react";
 
 function Login() {
   const [credentials, setCredentials] = useState({});
+
+  let navigate = useNavigate();
 
   function handleForm(e) {
     e.preventDefault();
@@ -14,12 +17,13 @@ function Login() {
 
   return (
     <Wrapper>
-      <Title />
+      <Logo />
       <Form onSubmit={handleForm}>
         <Input
           placeholder="E-mail"
           name="email"
           type="email"
+          required
           onChange={(e) =>
             setCredentials({ ...credentials, email: e.target.value })
           }
@@ -28,13 +32,16 @@ function Login() {
           placeholder="Senha"
           name="password"
           type="password"
+          required
           onChange={(e) =>
             setCredentials({ ...credentials, password: e.target.value })
           }
         />
         <Button>Entrar</Button>
       </Form>
-      <Register>Primeira vez? Cadastre-se!</Register>
+      <CreateAccount onClick={() => navigate("/sign-up")}>
+        Primeira vez? Cadastre-se!
+      </CreateAccount>
     </Wrapper>
   );
 }
@@ -49,10 +56,14 @@ const Wrapper = styled.div`
   align-items: center;
 `;
 
-const Register = styled.button`
+const CreateAccount = styled.button`
   background: none;
+  font-family: "Raleway", sans-serif;
+  font-weight: 700;
+  font-size: 15px;
   color: #ffffff;
   border: none;
+  cursor: pointer;
 `;
 
 export default Login;
