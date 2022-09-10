@@ -52,4 +52,22 @@ function withdraw(body, token) {
   return promisse;
 }
 
-export { login, register, getTransactions, getBalance, deposit, withdraw };
+function logout(token) {
+  const config = {
+    headers: {
+      token,
+    },
+  };
+  const promisse = axios.delete(`${BASE_URL}/wallet/logout`, config);
+  return promisse;
+}
+
+export {
+  login,
+  register,
+  getTransactions,
+  getBalance,
+  deposit,
+  withdraw,
+  logout,
+};

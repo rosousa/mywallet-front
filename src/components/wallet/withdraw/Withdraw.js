@@ -41,6 +41,7 @@ function Withdraw() {
             placeholder="Valor"
             type="number"
             name="value"
+            step="0.01"
             required
             onChange={(e) =>
               setWithdrawObj({ ...withdrawObj, value: e.target.value })
@@ -67,6 +68,7 @@ const Wrapper = styled.div`
   font-family: "Raleway", sans-serif;
   display: flex;
   justify-content: center;
+  align-items: center;
   width: 100vw;
   height: 100vh;
 

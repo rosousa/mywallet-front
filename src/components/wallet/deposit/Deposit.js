@@ -41,7 +41,7 @@ function Deposit() {
             placeholder="Valor"
             type="number"
             name="value"
-            step="1"
+            step="0.01"
             required
             onChange={(e) =>
               setDepositObj({ ...depositObj, value: e.target.value })
@@ -68,6 +68,7 @@ const Wrapper = styled.div`
   font-family: "Raleway", sans-serif;
   display: flex;
   justify-content: center;
+  align-items: center;
   width: 100vw;
   height: 100vh;
 

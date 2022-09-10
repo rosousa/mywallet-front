@@ -10,6 +10,7 @@ import Token from "../../contexts/Token";
 import Title from "../../styles/Title";
 import TransactionOption from "../../styles/TransactionOption";
 import { getTransactions, getBalance } from "../../services/myWallet";
+import { logout } from "../../services/myWallet";
 
 function Wallet() {
   const [transactions, setTransactions] = useState([]);
@@ -18,6 +19,13 @@ function Wallet() {
   let navigate = useNavigate();
 
   const { credentials } = useContext(Token);
+
+  function logoutUser() {
+    const authToken = `Bearer ${credentials.token}`;
+    logout(authToken).then(() => {
+      navigate("/");
+    });
+  }
 
   useEffect(() => {
     const authToken = `Bearer ${credentials.token}`;
@@ -34,12 +42,12 @@ function Wallet() {
       <div>
         <Header>
           <Title>{`Olá, ${credentials.username}`}</Title>
-          <span onClick={() => navigate("/")}>
+          <span onClick={logoutUser}>
             <IoExitOutline color="#ffffff" />
           </span>
         </Header>
         <Content>
-          <div>
+          <TransactionsDiv>
             {transactions.length === 0 ? (
               <NoRegistry>
                 <p>Não há registros de entrada ou saída</p>
@@ -59,7 +67,7 @@ function Wallet() {
                 );
               })
             )}
-          </div>
+          </TransactionsDiv>
           {balance ? (
             <Balance total={balance}>
               <p>SALDO</p>
@@ -127,6 +135,11 @@ const Content = styled.div`
   height: 446px;
   padding: 15px;
   border-radius: 5px;
+`;
+
+const TransactionsDiv = styled.div`
+  height: 93%;
+  overflow-y: scroll;
 `;
 
 const Transaction = styled.div`
