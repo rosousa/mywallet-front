@@ -1,14 +1,33 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Title from "../../../styles/Title";
 import { Form, Input, Button } from "../../../styles/FormStyle";
+import Token from "../../../contexts/Token";
+import { withdraw } from "../../../services/myWallet";
 
 function Withdraw() {
-  const [withdraw, setWithdraw] = useState({});
+  const [withdrawObj, setWithdrawObj] = useState({});
+
+  const { credentials } = useContext(Token);
+
+  const navigate = useNavigate();
 
   function handleForm(e) {
     e.preventDefault();
-    console.log(withdraw);
+
+    const token = `Bearer ${credentials.token}`;
+
+    const body = {
+      value: withdrawObj.value,
+      description: withdrawObj.description,
+    };
+
+    if (withdrawObj.value && withdrawObj.description) {
+      withdraw(body, token).then(() => {
+        navigate("/wallet");
+      });
+    }
   }
 
   return (
@@ -24,7 +43,7 @@ function Withdraw() {
             name="value"
             required
             onChange={(e) =>
-              setWithdraw({ ...withdraw, value: e.target.value })
+              setWithdrawObj({ ...withdrawObj, value: e.target.value })
             }
           />
           <Input
@@ -33,7 +52,7 @@ function Withdraw() {
             name="description"
             required
             onChange={(e) =>
-              setWithdraw({ ...withdraw, description: e.target.value })
+              setWithdrawObj({ ...withdrawObj, description: e.target.value })
             }
           />
           <Button>Salvar saída</Button>

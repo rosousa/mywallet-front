@@ -1,14 +1,33 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Title from "../../../styles/Title";
 import { Form, Input, Button } from "../../../styles/FormStyle";
+import { deposit } from "../../../services/myWallet";
+import Token from "../../../contexts/Token";
 
 function Deposit() {
-  const [deposit, setDeposit] = useState({});
+  const [depositObj, setDepositObj] = useState({});
+
+  const { credentials } = useContext(Token);
+
+  const navigate = useNavigate();
 
   function handleForm(e) {
     e.preventDefault();
-    console.log(deposit);
+
+    const token = `Bearer ${credentials.token}`;
+
+    const body = {
+      value: depositObj.value,
+      description: depositObj.description,
+    };
+
+    if (depositObj.value && depositObj.description) {
+      deposit(body, token).then(() => {
+        navigate("/wallet");
+      });
+    }
   }
 
   return (
@@ -22,8 +41,11 @@ function Deposit() {
             placeholder="Valor"
             type="number"
             name="value"
+            step="1"
             required
-            onChange={(e) => setDeposit({ ...deposit, value: e.target.value })}
+            onChange={(e) =>
+              setDepositObj({ ...depositObj, value: e.target.value })
+            }
           />
           <Input
             placeholder="Descrição"
@@ -31,7 +53,7 @@ function Deposit() {
             name="description"
             required
             onChange={(e) =>
-              setDeposit({ ...deposit, description: e.target.value })
+              setDepositObj({ ...depositObj, description: e.target.value })
             }
           />
           <Button>Salvar entrada</Button>

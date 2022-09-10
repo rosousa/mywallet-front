@@ -1,3 +1,4 @@
+import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import {
@@ -5,32 +6,68 @@ import {
   IoAddCircleOutline,
   IoRemoveCircleOutline,
 } from "react-icons/io5";
+import Token from "../../contexts/Token";
 import Title from "../../styles/Title";
 import TransactionOption from "../../styles/TransactionOption";
+import { getTransactions, getBalance } from "../../services/myWallet";
 
 function Wallet() {
+  const [transactions, setTransactions] = useState([]);
+  const [balance, setBalance] = useState();
+
   let navigate = useNavigate();
+
+  const { credentials } = useContext(Token);
+
+  useEffect(() => {
+    const authToken = `Bearer ${credentials.token}`;
+    getTransactions(authToken).then((res) => {
+      setTransactions([...res.data]);
+    });
+    getBalance(authToken).then((res) => {
+      setBalance(res.data.balance);
+    });
+  }, [credentials.token]);
 
   return (
     <Wrapper>
       <div>
         <Header>
-          <Title>Olá, fulano</Title>
+          <Title>{`Olá, ${credentials.username}`}</Title>
           <span onClick={() => navigate("/")}>
             <IoExitOutline color="#ffffff" />
           </span>
         </Header>
         <Content>
-          {/* <Transaction>
           <div>
-            <Date>30/11</Date>
-            <Description>Almoço mãe</Description>
+            {transactions.length === 0 ? (
+              <NoRegistry>
+                <p>Não há registros de entrada ou saída</p>
+              </NoRegistry>
+            ) : (
+              transactions.map((transaction, index) => {
+                return (
+                  <Transaction key={index}>
+                    <div>
+                      <Date>{transaction.date}</Date>
+                      <Description>{transaction.description}</Description>
+                    </div>
+                    <Value type={transaction.type}>
+                      {(transaction.value / 100).toFixed(2).replace(".", ",")}
+                    </Value>
+                  </Transaction>
+                );
+              })
+            )}
           </div>
-          <Value>39,90</Value>
-        </Transaction> */}
-          <NoRegistry>
-            <p>Não há registros de entrada ou saída</p>
-          </NoRegistry>
+          {balance ? (
+            <Balance total={balance}>
+              <p>SALDO</p>
+              <span>{balance.replace("-", "").replace(".", ",")}</span>
+            </Balance>
+          ) : (
+            ""
+          )}
         </Content>
         <TransactionButtons>
           <TransactionOption onClick={() => navigate("/wallet/deposit")}>
@@ -83,39 +120,54 @@ const Header = styled.div`
 
 const Content = styled.div`
   background-color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   width: 326px;
   height: 446px;
   padding: 15px;
   border-radius: 5px;
 `;
 
-// const Transaction = styled.div`
-//   display: flex;
-//   justify-content: space-between;
+const Transaction = styled.div`
+  display: flex;
+  justify-content: space-between;
 
-//   & > div {
-//     display: flex;
-//     column-gap: 10px;
-//   }
-// `;
+  & > div {
+    display: flex;
+    column-gap: 10px;
+  }
+`;
 
-// const Date = styled.p`
-//   color: #c6c6c6;
-//   font-size: 16px;
-//   font-weight: 600;
-// `;
+const Date = styled.p`
+  color: #c6c6c6;
+  font-size: 16px;
+  font-weight: 600;
+`;
 
-// const Description = styled.p`
-//   color: #000000;
-//   font-size: 16px;
-//   font-weight: 600;
-// `;
+const Description = styled.p`
+  color: #000000;
+  font-size: 16px;
+  font-weight: 600;
+`;
 
-// const Value = styled.p`
-//   color: green;
-//   font-size: 16px;
-//   font-weight: 600;
-// `;
+const Value = styled.p`
+  color: ${(props) => (props.type === "deposit" ? "green" : "red")};
+  font-size: 16px;
+  font-weight: 600;
+`;
+
+const Balance = styled.div`
+  display: flex;
+  justify-content: space-between;
+  color: black;
+  font-size: 16px;
+  font-weight: 700;
+
+  & > span {
+    color: ${(props) => (props.total < 0 ? "red" : "green")};
+  }
+`;
 
 const TransactionButtons = styled.div`
   display: flex;

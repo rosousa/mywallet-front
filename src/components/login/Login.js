@@ -1,18 +1,28 @@
+import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Logo from "./Logo";
 import { Form, Input, Button } from "../../styles/FormStyle";
-import { useState } from "react";
+import Token from "../../contexts/Token";
+import { login } from "../../services/myWallet";
 
 function Login() {
-  const [credentials, setCredentials] = useState({});
+  const [userCredentials, setUserCredentials] = useState({});
+
+  const { setCredentials } = useContext(Token);
 
   let navigate = useNavigate();
 
   function handleForm(e) {
     e.preventDefault();
-    console.log(credentials);
-    return;
+    login(userCredentials)
+      .then((res) => {
+        setCredentials({ token: res.data.token, username: res.data.username });
+        navigate("/wallet");
+      })
+      .catch(() => {
+        alert("Usuário e/ou senha inválidos");
+      });
   }
 
   return (
@@ -25,7 +35,7 @@ function Login() {
           type="email"
           required
           onChange={(e) =>
-            setCredentials({ ...credentials, email: e.target.value })
+            setUserCredentials({ ...userCredentials, email: e.target.value })
           }
         />
         <Input
@@ -34,7 +44,7 @@ function Login() {
           type="password"
           required
           onChange={(e) =>
-            setCredentials({ ...credentials, password: e.target.value })
+            setUserCredentials({ ...userCredentials, password: e.target.value })
           }
         />
         <Button>Entrar</Button>

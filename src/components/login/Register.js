@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Logo from "./Logo";
 import { Form, Input, Button } from "../../styles/FormStyle";
+import { register } from "../../services/myWallet";
 
 function Register() {
   let navigate = useNavigate();
@@ -11,7 +12,18 @@ function Register() {
 
   function handleForm(e) {
     e.preventDefault();
-    console.log(credentials);
+
+    if (credentials.password === credentials.passwordConfirmation) {
+      register(credentials)
+        .then(() => {
+          navigate("/");
+        })
+        .catch(() => {
+          alert("Preencha o formulário corretamente!");
+        });
+    } else {
+      alert("Preencha o formulário corretamente!");
+    }
   }
 
   return (
